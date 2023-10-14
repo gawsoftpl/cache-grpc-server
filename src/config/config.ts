@@ -7,19 +7,19 @@ const readFile = (path: string | undefined) => {
 
 const yn = (value, defaultValue) => {
   if (['true', '1', 1, true].includes(value)) return true;
-  if (['false', '0', 0, false].includes(value)) return true;
+  if (['false', '0', 0, false].includes(value)) return false;
   return defaultValue;
 };
 
 const Config = {
   grpc: {
-    listen: process.env.HOST || '0.0.0.0:3000',
+    listen: process.env.HOST || '127.0.0.1:3000',
     credentials: {
       insecure: yn(process.env.TLS_INSECURE, true),
-      ca_cert: readFile(process.env.TLS_CA_CERT_PATH || undefined),
+      caCert: readFile(process.env.TLS_CA_CERT_PATH || undefined),
       privateKey: readFile(process.env.TLS_KEY_PATH || undefined),
       certChain: readFile(process.env.TLS_CERT_PATH || undefined),
-      verifyClient: yn(process.env.TLS_VERIFY_CLIENT_CERT, true),
+      verifyClient: yn(process.env.TLS_VERIFY_CLIENT_CERT, false),
     },
   },
   redis: {

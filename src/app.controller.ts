@@ -16,7 +16,7 @@ interface Service {
 }
 
 @Controller('sample')
-export class HelloController {
+export class AppController {
   private Service: Service;
   constructor(private readonly appService: AppService) {}
 

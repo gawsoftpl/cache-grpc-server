@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { createClient } from 'redis';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 export const RedisFactory = async (configService: ConfigService) => {
   const logger = new Logger('RedisFactory');
@@ -44,7 +44,7 @@ export const RedisFactory = async (configService: ConfigService) => {
           logger.error('Redis reconnect');
           await client.connect();
         },
-        configService.get('redis.timeout.connection') ?? 5000,
+        configService.get('redis.timeout.connection') || 5000,
       );
     }
 

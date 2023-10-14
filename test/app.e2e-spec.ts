@@ -1,32 +1,16 @@
-import { GrpcReflection } from 'grpc-js-reflection-client';
 import { credentials } from '@grpc/grpc-js';
 import { INestApplication } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
-import { grpcClientOptions } from '../src/grpc-client.options';
+import { GrpcClientOptions } from '../src/grpc/grpc-client.options';
 import { AppModule } from '../src/app.module';
 import Config from '../src/config/config';
+import { grpcClient } from './grpcClient';
 
 describe('Proxy cache server GRPC (e2e)', () => {
   let app: INestApplication;
   let client;
   let clientHealth;
-
-  const grpcClient = async (packageName: string) => {
-    const reflectionClient = new GrpcReflection(
-      Config.grpc.listen,
-      credentials.createInsecure(),
-    );
-
-    const descriptor =
-      await reflectionClient.getDescriptorBySymbol(packageName);
-
-    return descriptor.getPackageObject({
-      keepCase: true,
-      enums: String,
-      longs: String,
-    });
-  };
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -34,25 +18,34 @@ describe('Proxy cache server GRPC (e2e)', () => {
     }).compile();
 
     app = module.createNestApplication();
-    app.connectMicroservice<MicroserviceOptions>(grpcClientOptions);
-    // Start gRPC microservice
+    const grpcClientOptions = app.get(GrpcClientOptions);
+    app.connectMicroservice<MicroserviceOptions>(
+      grpcClientOptions.getOptions(),
+    );
     await app.startAllMicroservices();
     await app.init();
   });
 
   beforeEach(async () => {
-    const packageCacheServer: any = await grpcClient('cacheserver.Cache');
+    const credentialsClient = credentials.createInsecure();
+    const packageCacheServer: any = await grpcClient(
+      'localhost:3000',
+      'cacheserver.Cache',
+      credentialsClient,
+    );
     client = new packageCacheServer.cacheserver.Cache(
       Config.grpc.listen,
-      credentials.createInsecure(),
+      credentialsClient,
     );
 
     const packageCacheServerHealth: any = await grpcClient(
+      'localhost:3000',
       'grpc.health.v1.Health',
+      credentialsClient,
     );
     clientHealth = new packageCacheServerHealth.grpc.health.v1.Health(
       Config.grpc.listen,
-      credentials.createInsecure(),
+      credentialsClient,
     );
   });
 
@@ -156,5 +149,5 @@ describe('Proxy cache server GRPC (e2e)', () => {
         keys: ['a', 'b'],
       });
     }
-  });
+  }, 20000);
 });

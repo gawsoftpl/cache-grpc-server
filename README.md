@@ -1,7 +1,15 @@
 # Overall
 Cache server use GRPC stream and Redis as storage.
+Features
+- Reflection
+- HealthProbe
+- Redis as storage
+- GRPC connection
+- GET and SET method as stream
+
 For fast data cache using grpc stream. Client has always connected with cache.
 Server has implemented grpc.health.v1 for readinessprobe
+
 ## Run server
 ### Via docker
 ```sh
@@ -10,6 +18,7 @@ docker run -it --rm -p 3000:3000 gawsoft/cache-grpc-server
 
 ### Via nodejs/typescript
 ```sh
+yarn build
 yarn start
 ```
 
