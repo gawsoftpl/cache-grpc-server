@@ -14,6 +14,8 @@ Server has implemented grpc.health.v1 for readinessprobe
 ### Via docker
 ```sh
 docker run -it --rm -e REDIS_HOST=redis://redis:6379 -p 3000:3000 gawsoft/cache-grpc-server
+# Or via docker-compose 
+docker-compose up
 ```
 
 ## For check health
