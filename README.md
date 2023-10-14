@@ -1,13 +1,14 @@
 # Overall
 Cache server use GRPC stream and Redis as storage.
-Features
+
+Features:
 - Reflection
 - HealthProbe
 - Redis as storage
 - GRPC connection
 - GET and SET method as stream
 
-For fast data cache using grpc stream. Client has always connected with cache.
+Client create one connection via stream, and send get or set command via grpc stream. This is very quick solution
 Server has implemented grpc.health.v1 for readinessprobe
 
 ## Run server
