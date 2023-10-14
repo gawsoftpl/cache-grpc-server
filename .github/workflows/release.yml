@@ -15,15 +15,11 @@ jobs:
 
   create-release:
     runs-on: ubuntu-latest
-    #needs: test
     steps:
-      - name: Create Release
-        shell: bash
-        run: |
-          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
-          bin/hub release create -m "${{ env.RELEASE_NAME }}" --draft ${{ env.TAG_NAME }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
 
   publish-npm:
     needs: create-release
