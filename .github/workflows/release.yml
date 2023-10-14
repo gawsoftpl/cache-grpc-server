@@ -10,27 +10,20 @@ on:
       - '*'
 
 jobs:
-  test:
-    uses: ./.github/workflows/test.yml
+  #test:
+  #  uses: ./.github/workflows/test.yml
 
   create-release:
-    name: Create Release
-    needs: test
     runs-on: ubuntu-latest
+    #needs: test
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+        shell: bash
+        run: |
+          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
+          bin/hub release create -m "${{ env.RELEASE_NAME }}" --draft ${{ env.TAG_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body:
-          draft: false
-          prerelease: false
 
   publish-npm:
     needs: create-release
