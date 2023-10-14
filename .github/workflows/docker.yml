@@ -9,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  tests:
+  test:
     uses: ./.github/workflows/test.yml
   docker-build:
     runs-on: ubuntu-latest
