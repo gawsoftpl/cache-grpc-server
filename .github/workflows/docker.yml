@@ -31,11 +31,26 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: gawsoft/cache-grpc-server
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+#      - name: Build and push
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          push: ${{ github.event_name != 'pull_request' }}
+#          tags:
+#            - gawsoft/cache-grpc-server:latest
+#            - gawsoft/cache-grpc-server:${{ github }}
+#          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build the Docker image
+        run: |
+          echo ${{ steps.meta.outputs.tags }}
+#          export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+#          python -m pip install --upgrade pip
+#          python -m pip install flake8 pytest
+#          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+#          VERSION=`python -c "from mlserver_openvino.version import __version__;print(__version__)"`
+#          mlserver build -t gawsoft/mlserver-openvino:$VERSION .
+#          docker image push gawsoft/mlserver-openvino:$VERSION
+#          # Publish latest
+#          docker image tag gawsoft/mlserver-openvino:$VERSION gawsoft/mlserver-openvino:latest
+#          docker image push gawsoft/mlserver-openvino:latest
 
