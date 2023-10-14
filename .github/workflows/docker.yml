@@ -5,6 +5,7 @@ name: Publish docker
 
 on:
   workflow_run:
+    branches: [main]
     workflows:
       - test
     types:
