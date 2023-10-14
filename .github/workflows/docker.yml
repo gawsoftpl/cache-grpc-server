@@ -5,9 +5,8 @@ name: Publish docker
 
 on:
   workflow_run:
+    workflows: ["test"]
     branches: [main]
-    workflows:
-      - test
     types:
       - completed
 #  push:
