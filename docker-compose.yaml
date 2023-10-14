@@ -7,9 +7,9 @@ services:
       - 6379:6379
 
   server:
-    image: cache-server
+    image: gawsoft/cache-grpc-server
     ports:
       - 3000:3000
     environment:
       REDIS_HOST: redis://redis:6379
-      #HOST: 0.0.0.0:3000
+      HOST: 0.0.0.0:3000
