@@ -3,6 +3,13 @@
 
 
 name: Publish docker
+
+on:
+  workflow_call:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "main" ]
 #
 #on:
 #  push:
