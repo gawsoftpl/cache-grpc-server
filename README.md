@@ -55,6 +55,47 @@ rpc Exists (stream GetRequest) returns (stream ExistsResponse);
 rpc Set (stream SetRequest) returns (stream SetResponse);
 ```
 
+
+## Use as library
+If you dont want to use Redis as a storage you can write custom storage class with Interface StorageStrategyInterface
+
+```sh
+npm install cache-grpc-server
+```
+
+```typescript
+import { NestFactory } from '@nestjs/core';
+import { AppModule, GrpcClientOptions, SetRequestInterface, StorageStrategyInterface } from 'cache-grpc-server'
+import { MicroserviceOptions } from '@nestjs/microservices';
+
+class CustomStorageStrategy implements StorageStrategyInterface
+{
+  async existsMulti(keys: string[]): Promise<boolean[]> {
+    return [true, false];
+  }
+  async getMulti(keys: string[]): Promise<string[]> {
+    return ['a','b'];
+  }
+  async save(data: SetRequestInterface): Promise<string> {
+    return "test"
+  }
+}
+
+export async function bootstrap() {
+  // Here inject custom storage strategy
+  const app = await NestFactory.create(AppModule.register(CustomStorageStrategy));
+  const grpcClientOptions = app.get(GrpcClientOptions);
+  app.connectMicroservice<MicroserviceOptions>(grpcClientOptions.getOptions());
+
+  await app.startAllMicroservices();
+  await app.init();
+  return app;
+}
+
+bootstrap();
+
+```
+
 ## Tests
 E2E tests
 ```sh
