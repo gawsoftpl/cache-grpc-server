@@ -3,7 +3,6 @@
   "version": "0.0.2",
   "description": "Cache server with grpc and redis",
   "author": "gawsoft.com",
-  "private": true,
   "main": "dist/index.js",
   "license": "MIT",
   "files": [

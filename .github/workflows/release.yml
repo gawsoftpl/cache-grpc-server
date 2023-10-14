@@ -10,8 +10,8 @@ on:
       - '*'
 
 jobs:
-  #test:
-  #  uses: ./.github/workflows/test.yml
+  test:
+    uses: ./.github/workflows/test.yml
 
   create-release:
     runs-on: ubuntu-latest
