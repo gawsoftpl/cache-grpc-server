@@ -5,13 +5,13 @@ name: Publish docker
 
 on:
   workflow_run:
-    workflows: [ test ]
+    workflows:
+      - test
     types:
       - completed
-
-  push:
-    tags:
-      - '*'
+#  push:
+#    tags:
+#      - '*'
 
 jobs:
 
@@ -31,9 +31,10 @@ jobs:
           images: gawsoft/cache-grpc-server
       - name: Build the Docker image
         run: |
-          docker image build -t gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }} .
-          docker image push gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }}
-          
-          # Publish latest
-          docker image tag gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }} gawsoft/cache-grpc-server:latest
-          docker image push gawsoft/cache-grpc-server:latest
+          echo 4;
+#          docker image build -t gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }} .
+#          docker image push gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }}
+#
+#          # Publish latest
+#          docker image tag gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }} gawsoft/cache-grpc-server:latest
+#          docker image push gawsoft/cache-grpc-server:latest
