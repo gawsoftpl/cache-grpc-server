@@ -1,4 +1,4 @@
-FROM node:20.5-alpine3.18 as builder
+FROM node:20-alpine3.18 as builder
 
 WORKDIR /project
 
@@ -14,7 +14,7 @@ RUN yarn build
 
 USER node
 
-FROM node:20.5-alpine3.18 as deploy
+FROM node:20-alpine3.18 as deploy
 
 # Download GRPC healthcheck
 RUN GRPC_HEALTH_PROBE_VERSION=v0.4.6  \
