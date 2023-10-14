@@ -1,4 +1,4 @@
-import { Controller, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Controller } from '@nestjs/common';
 import { GrpcStreamMethod } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { GetRequestInterface } from './interfaces/get.request.interface';
@@ -42,16 +42,15 @@ export class HelloController {
   }
 
   @GrpcStreamMethod('Cache', 'Get')
-  @UsePipes(new ValidationPipe({ transform: true }))
   get(data: Observable<GetRequestInterface>): Observable<GetResponseInterface> {
     const subject = new Subject<GetResponseInterface>();
-
     const onNext = async (request: GetRequestInterface) => {
       const item: GetResponseInterface = {
         values: await this.appService.getMulti(request.keys),
       };
       subject.next(item);
     };
+
     const onComplete = () => subject.complete();
     data.subscribe({
       next: onNext,

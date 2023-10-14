@@ -5,8 +5,3 @@ services:
     image: redis
     ports:
       - 6379:6379
-  s3:
-    image: bitnami/minio
-    ports:
-      - 9000:9000
-      - 9005:9001

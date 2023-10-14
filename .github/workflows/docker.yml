@@ -1,0 +1,33 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Publish pypi and docker
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: deploy-package
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to Docker Hub
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: gawsoft/cache-grpc-server
+      - name: Build the Docker image
+        run: |
+          docker image build -t gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }} .
+          docker image push gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }}
+          
+          # Publish latest
+          docker image tag gawsoft/cache-grpc-server:${{ steps.meta.outputs.tags }} gawsoft/cache-grpc-server:latest
+          docker image push gawsoft/cache-grpc-server:latest

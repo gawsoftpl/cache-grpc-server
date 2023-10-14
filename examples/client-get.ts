@@ -37,8 +37,7 @@ import { credentials } from '@grpc/grpc-js';
     });
 
     call.write({
-      //keys: ['b'],
-      as: "fd"
+      keys: [1],
     });
   } catch (err) {
     console.log('ERROR', err.message);

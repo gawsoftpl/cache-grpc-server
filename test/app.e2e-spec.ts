@@ -133,4 +133,28 @@ describe('Proxy cache server GRPC (e2e)', () => {
       done();
     });
   });
+
+  it('Run 10000 get requests via one stream', (done) => {
+    const call = client.Get();
+    const calls_to_run = 10000;
+    let calls_counter = 0;
+    call.on('data', async (message) => {
+      expect(
+        message.values.filter((value) => ['test', 'test2'].includes(value))
+          .length,
+      ).toBe(2);
+      calls_counter++;
+      if (calls_counter == calls_to_run) await call.end();
+    });
+
+    call.on('end', () => {
+      done();
+    });
+
+    for (let i = 0; i < calls_to_run; i++) {
+      call.write({
+        keys: ['a', 'b'],
+      });
+    }
+  });
 });

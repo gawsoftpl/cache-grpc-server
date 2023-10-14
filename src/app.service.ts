@@ -8,6 +8,7 @@ export class AppService {
 
   async existsMulti(keys: Array<string>): Promise<Array<boolean>> {
     const multi = this.cacheManager.multi();
+    if (!keys) return [];
     keys.forEach((key) => multi.exists(key));
     const response = await multi.exec();
     return response.map((response) => (response ? true : false));
@@ -15,6 +16,7 @@ export class AppService {
 
   async getMulti(keys: Array<string>): Promise<Array<string>> {
     const multi = this.cacheManager.multi();
+    if (!keys) return [];
     keys.forEach((key) => multi.get(key));
     const response = await multi.exec();
     return response.map((value) => value?.toString() ?? '');
