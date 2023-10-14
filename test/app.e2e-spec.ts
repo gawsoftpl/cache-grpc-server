@@ -14,7 +14,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule.register()],
     }).compile();
 
     app = module.createNestApplication();

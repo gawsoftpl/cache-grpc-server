@@ -14,15 +14,14 @@ import { AppModule } from '../src/app.module';
 import * as fs from 'fs';
 import { grpcClient } from './grpcClient';
 
-
 describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
   let app: INestApplication;
   let client;
-  const host = "localhost:3000"
+  const host = 'localhost:3000';
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule.register()],
     }).compile();
 
     app = module.createNestApplication();
@@ -34,7 +33,6 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
     );
     await app.startAllMicroservices();
     await app.init();
-
   });
 
   beforeEach(async () => {
@@ -48,10 +46,7 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
       credentialsClient,
     );
 
-    client = new packageCacheServer.cacheserver.Cache(
-      host,
-      credentialsClient,
-    );
+    client = new packageCacheServer.cacheserver.Cache(host, credentialsClient);
   });
 
   afterEach(() => {

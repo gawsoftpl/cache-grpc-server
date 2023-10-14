@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RedisClientType } from 'redis';
-import { SetRequestInterface } from './interfaces/set.request.interface';
+import { SetRequestInterface } from '../interfaces/set.request.interface';
+import { StorageStrategyInterface } from '../interfaces/storage.strategy.interface';
 
 @Injectable()
-export class AppService {
+export class RedisStrategy implements StorageStrategyInterface {
   constructor(@Inject('RedisClient') private cacheManager: RedisClientType) {}
 
   async existsMulti(keys: Array<string>): Promise<Array<boolean>> {
