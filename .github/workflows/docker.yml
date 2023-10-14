@@ -13,7 +13,7 @@ jobs:
     uses: ./.github/workflows/test.yml
   docker-build:
     runs-on: ubuntu-latest
-    needs: deploy-package
+    needs: test
     steps:
       - uses: actions/checkout@v3
       - name: Log in to Docker Hub
