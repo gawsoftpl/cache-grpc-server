@@ -4,16 +4,16 @@
 
 name: Publish docker
 
-on:
-  push:
-    branches: [ "**" ]
-  pull_request:
-    branches: [ "main" ]
-#
 #on:
 #  push:
-#    tags:
-#      - '*'
+#    branches: [ "**" ]
+#  pull_request:
+#    branches: [ "main" ]
+##
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
 #  test:
