@@ -3,18 +3,14 @@
 
 name: Publish docker
 
-on:
-  workflow_run:
-    workflows: ["test"]
-    branches: [main]
-    types:
-      - completed
+#on:
 #  push:
 #    tags:
 #      - '*'
 
 jobs:
-
+  tests:
+    uses: ./.github/workflows/test.yml
   docker-build:
 
     runs-on: ubuntu-latest
