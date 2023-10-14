@@ -36,8 +36,6 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags:
-            - gawsoft/cache-grpc-server:latest
-            - gawsoft/cache-grpc-server:${{ github.ref_name }}
+          tags: gawsoft/cache-grpc-server:latest,gawsoft/cache-grpc-server:${{ github.ref_name }}
           labels: ${{ steps.meta.outputs.labels }}
 
