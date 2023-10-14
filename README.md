@@ -1,5 +1,6 @@
 # Overall
 Server for fast save and read data from cache. Use GRPC stream for connection and Redis as storage.
+Ready for TLS and mTLS.
 
 Features:
 - GRPC connection
@@ -10,7 +11,7 @@ Features:
 - NestJs framework
 
 Client create one connection via stream, and send get or set command via grpc stream. This is very quick solution
-Server has implemented grpc.health.v1 for readinessprobe
+Server has implemented grpc.health.v1 for readinessprobe too
 
 ## Run server
 ### Via docker
