@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package cacheserver;
+
+service Cache {
+    rpc Get (stream GetRequest) returns (stream GetResponse);
+    rpc Exists (stream GetRequest) returns (stream ExistsResponse);
+    rpc Set (stream SetRequest) returns (stream SetResponse);
+}
+
+message GetRequest {
+    repeated string keys = 1;
+}
+
+message GetResponse {
+    repeated string values = 1;
+}
+
+message ExistsResponse {
+    repeated bool exists = 1;
+}
+
+message SetRequest {
+    string key = 1;
+    string value = 2;
+    uint32 ttl = 3;
+}
+
+message SetResponse {
+    bool saved = 1;
+}
