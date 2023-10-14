@@ -56,7 +56,7 @@ rpc Set (stream SetRequest) returns (stream SetResponse);
 ```
 
 
-## Use as library
+## Use as a library (Custom storage strategy)
 If you dont want to use Redis as a storage you can write custom storage class with Interface StorageStrategyInterface
 
 ```sh
