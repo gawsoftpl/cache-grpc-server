@@ -5,10 +5,10 @@ name: test
 
 on:
   workflow_call:
-#  push:
-#    branches: [ "**" ]
-#  pull_request:
-#    branches: [ "main" ]
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
