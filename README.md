@@ -67,7 +67,9 @@ npm install cache-grpc-server
 import { NestFactory } from '@nestjs/core';
 import { AppModule, GrpcClientOptions, SetRequestInterface, StorageStrategyInterface } from 'cache-grpc-server'
 import { MicroserviceOptions } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 class CustomStorageStrategy implements StorageStrategyInterface
 {
   async existsMulti(keys: string[]): Promise<boolean[]> {
