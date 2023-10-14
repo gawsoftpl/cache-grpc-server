@@ -6,12 +6,7 @@ ARG ENV
 
 COPY package.json .
 
-RUN if [[ "$ENV" == "dev" ]] ; then \
-        echo "INSTALL development environment" ; \
-        yarn install ; \
-    else  \
-        yarn install --production ; \
-    fi
+RUN yarn install
 
 COPY . .
 
@@ -21,18 +16,23 @@ USER node
 
 FROM node:20.5-alpine3.18 as deploy
 
-WORKDIR /project
-
 # Download GRPC healthcheck
 RUN GRPC_HEALTH_PROBE_VERSION=v0.4.6  \
     && wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 \
     && chmod +x /bin/grpc_health_probe
 
+USER node
+
+WORKDIR /project
+
+COPY package.json /project/package.json
+COPY protos /project/protos
+
+RUN yarn install --production
+
 # Copy data from builder
-COPY --from=builder /project/ /project/
+COPY --chown=node:node --from=builder /project/dist /project/dist
 
 EXPOSE 3000
 
-USER node
-
-CMD [ "yarn", "start" ]
+CMD [ "node", "/project/dist/main" ]

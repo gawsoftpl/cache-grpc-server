@@ -13,7 +13,13 @@ Server has implemented grpc.health.v1 for readinessprobe
 ## Run server
 ### Via docker
 ```sh
-docker run -it --rm -p 3000:3000 gawsoft/cache-grpc-server
+docker run -it --rm -e REDIS_HOST=redis://redis:6379 -p 3000:3000 gawsoft/cache-grpc-server
+```
+
+## For check health
+If you want to run this in kubernetes run 
+```sh
+grpc_health_probe --addr localhost:3000
 ```
 
 ### Via nodejs/typescript

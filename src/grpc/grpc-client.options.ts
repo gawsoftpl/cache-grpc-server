@@ -17,8 +17,8 @@ export class GrpcClientOptions {
         credentials: this.getCredentials(),
         package: ['cacheserver', 'grpc.health.v1'],
         protoPath: [
-          join(__dirname, '../../protos/cache-server.proto'),
-          join(__dirname, '../../protos/health.proto'),
+          join(__dirname, '/../../protos/cache-server.proto'),
+          join(__dirname, '/../../protos/health.proto'),
         ],
       },
     });

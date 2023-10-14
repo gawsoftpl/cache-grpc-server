@@ -13,7 +13,7 @@ const yn = (value, defaultValue) => {
 
 const Config = {
   grpc: {
-    listen: process.env.HOST || '127.0.0.1:3000',
+    listen: process.env.HOST || '0.0.0.0:3000',
     credentials: {
       insecure: yn(process.env.TLS_INSECURE, true),
       caCert: readFile(process.env.TLS_CA_CERT_PATH || undefined),
