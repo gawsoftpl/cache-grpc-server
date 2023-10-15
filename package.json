@@ -9,6 +9,11 @@
     "dist",
     "protos"
   ],
+  "homepage": "https://gawsoft.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gawsoftpl/cache-grpc-server"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
