@@ -13,7 +13,8 @@ message GetRequest {
 }
 
 message GetResponse {
-    repeated string values = 1;
+    repeated string keys = 1;
+    repeated string values = 2;
 }
 
 message ExistsResponse {

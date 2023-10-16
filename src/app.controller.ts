@@ -25,6 +25,7 @@ export class AppController {
 
     const onNext = async (request: GetRequestInterface) => {
       const item: ExistsResponseInterface = {
+        keys: request.keys,
         exists: await this.storageStrategy.existsMulti(request.keys),
       };
       subject.next(item);
