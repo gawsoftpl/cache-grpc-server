@@ -1,9 +1,10 @@
 import { SetRequestInterface } from './set.request.interface';
+import { KeysType } from './keys.interface';
 
 export interface StorageStrategyInterface {
-  existsMulti(keys: Array<string>): Promise<Array<boolean>>;
+  existsMulti(keys: KeysType): Promise<Array<boolean>>;
 
-  getMulti(keys: Array<string>): Promise<Array<string>>;
+  getMulti(keys: KeysType): Promise<Array<string>>;
 
   save(data: SetRequestInterface): Promise<string>;
 }

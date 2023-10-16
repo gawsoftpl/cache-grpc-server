@@ -1,6 +1,6 @@
 {
   "name": "cache-grpc-server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Cache server with grpc and redis",
   "author": "gawsoft.com",
   "main": "dist/index.js",

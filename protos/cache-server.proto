@@ -17,7 +17,8 @@ message GetResponse {
 }
 
 message ExistsResponse {
-    repeated bool exists = 1;
+    repeated string keys = 1;
+    repeated bool exists = 2;
 }
 
 message SetRequest {

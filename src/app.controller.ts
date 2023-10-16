@@ -43,6 +43,7 @@ export class AppController {
     const subject = new Subject<GetResponseInterface>();
     const onNext = async (request: GetRequestInterface) => {
       const item: GetResponseInterface = {
+        keys: request.keys,
         values: await this.storageStrategy.getMulti(request.keys),
       };
       subject.next(item);
@@ -61,8 +62,8 @@ export class AppController {
   set(data: Observable<SetRequestInterface>): Observable<SetResponseInterface> {
     const subject = new Subject<SetResponseInterface>();
 
-    const onNext = (request: SetRequestInterface) => {
-      this.storageStrategy.save(request);
+    const onNext = async(request: SetRequestInterface) => {
+      await this.storageStrategy.save(request);
       const item: SetResponseInterface = {
         saved: true,
       };
