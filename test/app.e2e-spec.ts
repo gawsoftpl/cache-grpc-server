@@ -88,7 +88,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
     const call = client.Exists();
 
     call.on('data', async (message) => {
-      expect(message.keys).toBe(['a', 'b']);
+      expect(message.keys).toMatchObject(['a', 'b']);
       expect(message.exists.filter((flag) => flag).length).toBe(2);
       call.end();
     });
@@ -105,7 +105,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
   it('Should get elements from previous SET', (done) => {
     const call = client.Get();
     call.on('data', async (message) => {
-      expect(message.keys).toBe(['a', 'b']);
+      expect(message.keys).toMatchObject(['a', 'b']);
       expect(
         message.values.filter((value) => ['test', 'test2'].includes(value))
           .length,
