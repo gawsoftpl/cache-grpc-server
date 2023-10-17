@@ -9,17 +9,17 @@ service Cache {
 }
 
 message GetRequest {
-    string request_id=1;
+    string id = 1;
     repeated string keys = 2;
 }
 
 message GetResponse {
-    string request_id=1;
+    string id = 1;
     repeated string values = 2;
 }
 
 message ExistsResponse {
-    string request_id=1;
+    string id = 1;
     repeated bool exists = 2;
 }
 

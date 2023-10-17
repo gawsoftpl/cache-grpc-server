@@ -88,8 +88,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
     const call = client.Exists();
 
     call.on('data', async (message) => {
-      console.log(message);
-      expect(message.request_id).toBe('abc');
+      expect(message.id).toBe('abc');
       expect(message.exists.filter((flag) => flag).length).toBe(2);
       call.end();
     });
@@ -99,7 +98,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
     });
 
     call.write({
-      request_id: 'abc',
+      id: 'abc',
       keys: ['a', 'b'],
     });
   });
@@ -107,7 +106,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
   it('Should get elements from previous SET', (done) => {
     const call = client.Get();
     call.on('data', async (message) => {
-      expect(message.request_id).toBe('abc2');
+      expect(message.id).toBe('abc2');
       expect(
         message.values.filter((value) => ['test', 'test2'].includes(value))
           .length,
@@ -120,7 +119,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
     });
 
     call.write({
-      request_id: 'abc2',
+      id: 'abc2',
       keys: ['a', 'b'],
     });
   });
