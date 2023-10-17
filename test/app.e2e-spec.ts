@@ -124,6 +124,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
     });
   });
 
+
   it('Should return health flag', (done) => {
     clientHealth.Check({ service: 'health' }, (e, response) => {
       expect(response.status).toBe('SERVING');
