@@ -1,5 +1,5 @@
-import { KeysInterface } from './keys.interface';
+import { Request_idInterface } from './request_id.interface';
 
-export interface GetResponseInterface extends KeysInterface {
+export interface GetResponseInterface extends Request_idInterface {
   values: Array<string>;
 }

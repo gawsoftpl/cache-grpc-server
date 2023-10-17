@@ -25,7 +25,7 @@ export class AppController {
 
     const onNext = async (request: GetRequestInterface) => {
       const item: ExistsResponseInterface = {
-        keys: request.keys,
+        request_id: request.request_id,
         exists: await this.storageStrategy.existsMulti(request.keys),
       };
       subject.next(item);
@@ -44,7 +44,7 @@ export class AppController {
     const subject = new Subject<GetResponseInterface>();
     const onNext = async (request: GetRequestInterface) => {
       const item: GetResponseInterface = {
-        keys: request.keys,
+        request_id: request.request_id,
         values: await this.storageStrategy.getMulti(request.keys),
       };
       subject.next(item);
