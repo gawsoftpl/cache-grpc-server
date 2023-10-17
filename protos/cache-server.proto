@@ -30,5 +30,6 @@ message SetRequest {
 }
 
 message SetResponse {
-    bool saved = 1;
+    string key = 1;
+    bool saved = 2;
 }

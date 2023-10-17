@@ -66,6 +66,7 @@ export class AppController {
     const onNext = async(request: SetRequestInterface) => {
       await this.storageStrategy.save(request);
       const item: SetResponseInterface = {
+        key: request.key,
         saved: true,
       };
       subject.next(item);
