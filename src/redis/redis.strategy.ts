@@ -24,6 +24,10 @@ export class RedisStrategy implements StorageStrategyInterface {
   }
 
   save(data: SetRequestInterface) {
-    return this.cacheManager.set(data.key, data.value, { EX: data.ttl });
+    let opts = {}
+    if (data.ttl > 0 || data.ttl==-1)
+      opts = { EX: data.ttl }
+
+    return this.cacheManager.set(data.key, data.value, opts);
   }
 }

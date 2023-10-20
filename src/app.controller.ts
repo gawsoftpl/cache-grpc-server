@@ -8,13 +8,11 @@ import { SetResponseInterface } from './interfaces/set.response.interface';
 import { ExistsResponseInterface } from './interfaces/exists.response.interface';
 import { StorageStrategyInterface } from './interfaces/storage.strategy.interface';
 
-
 @Controller('sample')
 export class AppController {
-
   constructor(
     @Inject('STORAGE_STRATEGY')
-    private readonly storageStrategy: StorageStrategyInterface
+    private readonly storageStrategy: StorageStrategyInterface,
   ) {}
 
   @GrpcStreamMethod('Cache', 'Exists')
@@ -63,7 +61,7 @@ export class AppController {
   set(data: Observable<SetRequestInterface>): Observable<SetResponseInterface> {
     const subject = new Subject<SetResponseInterface>();
 
-    const onNext = async(request: SetRequestInterface) => {
+    const onNext = async (request: SetRequestInterface) => {
       await this.storageStrategy.save(request);
       const item: SetResponseInterface = {
         key: request.key,
