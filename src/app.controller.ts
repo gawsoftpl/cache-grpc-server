@@ -32,6 +32,7 @@ export class AppController {
     data.subscribe({
       next: onNext,
       complete: onComplete,
+      error: subject.error,
     });
 
     return subject.asObservable();
@@ -52,6 +53,7 @@ export class AppController {
     data.subscribe({
       next: onNext,
       complete: onComplete,
+      error: subject.error,
     });
 
     return subject.asObservable();
@@ -73,6 +75,7 @@ export class AppController {
     data.subscribe({
       next: onNext,
       complete: onComplete,
+      error: subject.error,
     });
 
     return subject.asObservable();

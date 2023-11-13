@@ -84,6 +84,21 @@ describe('Proxy cache server GRPC (e2e)', () => {
     });
   }, 5000);
 
+  it('Should return error on set wrong ttl format', (done) => {
+    const call = client.Set();
+
+    call.on('error', (err) => {
+      console.log(err);
+      done();
+    });
+
+    call.write({
+      key: 'a',
+      value: 'test',
+    });
+
+  }, 5000);
+
   it('Should exists elements from previous SET', (done) => {
     const call = client.Exists();
 

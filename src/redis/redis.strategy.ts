@@ -24,10 +24,11 @@ export class RedisStrategy implements StorageStrategyInterface {
   }
 
   save(data: SetRequestInterface) {
-    let opts = {}
-    if (data.ttl > 0 || data.ttl==-1)
-      opts = { EX: data.ttl }
 
+    let opts = {};
+    if (data.ttl > 0 || data.ttl == -1) opts = { EX: data.ttl };
+
+    //if (!Number.isInteger(data?.ttl)) throw new Error('TTL wrong format');
     return this.cacheManager.set(data.key, data.value, opts);
   }
 }
