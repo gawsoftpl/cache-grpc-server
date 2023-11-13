@@ -88,12 +88,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
     const call = client.Set();
 
     call.on('error', (err) => {
-      console.log(err);
-      done();
-    });
-
-    call.on('end', () => {
-      console.log('end');
+      expect(err.message).toContain('No set TTL');
       done();
     });
 
