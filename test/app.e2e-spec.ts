@@ -92,8 +92,12 @@ describe('Proxy cache server GRPC (e2e)', () => {
       done();
     });
 
+    call.on('end', () => {
+      console.log('end');
+      done();
+    });
+
     call.write({
-      key: 'a',
       value: 'test',
     });
 

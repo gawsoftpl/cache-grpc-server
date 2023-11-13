@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { SetResponseInterface } from './interfaces/set.response.interface';
 import { ExistsResponseInterface } from './interfaces/exists.response.interface';
 import { StorageStrategyInterface } from './interfaces/storage.strategy.interface';
+import { Metadata, ServerDuplexStream } from '@grpc/grpc-js';
 
 @Controller('sample')
 export class AppController {
@@ -60,22 +61,31 @@ export class AppController {
   }
 
   @GrpcStreamMethod('Cache', 'Set')
-  set(data: Observable<SetRequestInterface>): Observable<SetResponseInterface> {
+  set(
+    data: Observable<SetRequestInterface>,
+    metadata: Metadata,
+    call: ServerDuplexStream<any, any>,
+  ): Observable<SetResponseInterface> {
     const subject = new Subject<SetResponseInterface>();
 
     const onNext = async (request: SetRequestInterface) => {
-      await this.storageStrategy.save(request);
+      try {
+        await this.storageStrategy.save(request);
+      } catch (err) {
+        call.emit('error', err);
+        return;
+      }
       const item: SetResponseInterface = {
         key: request.key,
         saved: true,
       };
       subject.next(item);
     };
-    const onComplete = () => subject.complete();
+
     data.subscribe({
       next: onNext,
-      complete: onComplete,
-      error: subject.error,
+      complete: () => subject.complete(),
+      error: (e) => subject.error(e),
     });
 
     return subject.asObservable();

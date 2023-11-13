@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RedisClientType } from 'redis';
 import { SetRequestInterface } from '../interfaces/set.request.interface';
 import { StorageStrategyInterface } from '../interfaces/storage.strategy.interface';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class RedisStrategy implements StorageStrategyInterface {
@@ -24,6 +25,10 @@ export class RedisStrategy implements StorageStrategyInterface {
   }
 
   save(data: SetRequestInterface) {
+    if (typeof data?.ttl === 'undefined')
+      throw new RpcException({ message: 'No set TTL' });
+    if (typeof data?.key === 'undefined')
+      throw new RpcException({ message: 'No set Key' });
 
     let opts = {};
     if (data.ttl > 0 || data.ttl == -1) opts = { EX: data.ttl };
