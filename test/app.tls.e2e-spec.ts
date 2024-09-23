@@ -45,7 +45,6 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
     );
 
     client = new packageCacheServer.cacheserver.Cache(host, credentialsClient);
-    console.log(client)
   });
 
   afterEach(() => {
