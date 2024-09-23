@@ -16,7 +16,7 @@ Server has implemented grpc.health.v1 for readinessprobe too
 ## Run server
 ### Via docker
 ```sh
-docker run -it --rm -e REDIS_HOST=redis://redis:6379 -p 3000:3000 gawsoft/cache-grpc-server
+docker run -it --rm -e REDIS_URL=redis://redis:6379 -p 3000:3000 gawsoft/cache-grpc-server
 # Or via docker-compose 
 docker-compose up
 ```
@@ -36,7 +36,7 @@ yarn start
 # Env
 ```sh
 HOST=0.0.0.0:3000
-REDIS_HOST=127.0.0.1:6379
+REDIS_URL=127.0.0.1:6379
 
 # Setup TLS
 #TLS_INSECURE=false

@@ -28,6 +28,4 @@ jobs:
       - run: yarn install
       - run: yarn build
       - run: |
-          docker-compose -f docker-compose.test.yaml up -d
-          sleep 5
           yarn test:e2e

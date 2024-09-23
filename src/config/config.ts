@@ -24,9 +24,7 @@ const Config = {
   },
   redis: {
     connection: {
-      url: process.env.REDIS_HOST || 'redis://localhost:6379',
-      username: process.env.REDIS_USER || '',
-      password: process.env.REDIS_PASSWORD || '',
+      url: process.env.REDIS_URL || 'redis://localhost:6379', // For cluster use redis://redis-1:6379,redis://redis-2:6379
       database: process.env.REDIS_DATABASE || '0',
     },
     timeout: {

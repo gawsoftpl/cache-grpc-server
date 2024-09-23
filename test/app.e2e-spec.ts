@@ -28,6 +28,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
 
   beforeEach(async () => {
     const credentialsClient = credentials.createInsecure();
+ 
     const packageCacheServer: any = await grpcClient(
       'localhost:3000',
       'cacheserver.Cache',
@@ -95,7 +96,6 @@ describe('Proxy cache server GRPC (e2e)', () => {
     call.write({
       value: 'test',
     });
-
   }, 5000);
 
   it('Should exists elements from previous SET', (done) => {
@@ -137,7 +137,6 @@ describe('Proxy cache server GRPC (e2e)', () => {
       keys: ['a', 'b'],
     });
   });
-
 
   it('Should return health flag', (done) => {
     clientHealth.Check({ service: 'health' }, (e, response) => {

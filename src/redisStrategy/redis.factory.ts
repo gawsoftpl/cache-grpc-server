@@ -1,36 +1,31 @@
 import { Logger } from '@nestjs/common';
-import { createClient } from 'redis';
+import { createClient, createCluster } from 'redis';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 export const RedisFactory = async (configService: ConfigService) => {
   const logger = new Logger('RedisFactory');
 
-  const prepareConfig = (config) => {
-    if (config.url) {
-      return config.url;
-    }
-
-    let url = 'redis://';
-    if (config.username && config.password) {
-      url += `${config.username}:${config.password}@`;
-    }
-
-    if (isNaN(parseInt(config.port)))
-      throw new Error('Redis port should be a number');
-
-    url += `${config.host}:${config.port}`;
-    return url;
+  const prepareUrl = (configData) => {
+    return configData.url.split(',');
   };
 
   const connect = async () => {
-    const url = prepareConfig(configService.get('redis.connection'));
+    const urls = prepareUrl(configService.get('redis.connection'));
 
     let client;
     try {
-      client = createClient({
-        url: url,
-        database: configService.get('redis.connection.database'),
-      });
+
+      if (urls.length == 1)
+        client = createClient({
+          url: urls[0],
+          database: configService.get('redis.connection.database'),
+        });
+      else
+        client = createCluster({
+          rootNodes: urls.map((url) => ({
+            url: url
+          })),
+        })
 
       client.on('error', (err) => {
         logger.error(err);
