@@ -25,8 +25,6 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
     }).compile();
 
     app = module.createNestApplication();
-
-    app = module.createNestApplication();
     const grpcClientOptions = app.get(GrpcClientOptions);
     app.connectMicroservice<MicroserviceOptions>(
       grpcClientOptions.getOptions(),
@@ -47,6 +45,7 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
     );
 
     client = new packageCacheServer.cacheserver.Cache(host, credentialsClient);
+    console.log(client)
   });
 
   afterEach(() => {

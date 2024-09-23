@@ -13,6 +13,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
   let clientHealth;
 
   beforeAll(async () => {
+
     const module = await Test.createTestingModule({
       imports: [AppModule.register()],
     }).compile();
@@ -27,6 +28,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
   });
 
   beforeEach(async () => {
+   
     const credentialsClient = credentials.createInsecure();
  
     const packageCacheServer: any = await grpcClient(
@@ -168,4 +170,5 @@ describe('Proxy cache server GRPC (e2e)', () => {
       });
     }
   }, 20000);
+
 });

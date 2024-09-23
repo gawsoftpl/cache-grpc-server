@@ -1,27 +1,30 @@
-import { Transport } from '@nestjs/microservices';
+import { Transport, ClientOptions } from '@nestjs/microservices';
 import { join } from 'path';
-import { addReflectionToGrpcConfig } from 'nestjs-grpc-reflection';
 import { ServerCredentials } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ReflectionService } from '@grpc/reflection';
 
 @Injectable()
 export class GrpcClientOptions {
   constructor(private configService: ConfigService) {}
 
-  getOptions() {
-    return addReflectionToGrpcConfig({
+  getOptions(): ClientOptions {
+    return {
       transport: Transport.GRPC,
       options: {
         url: this.configService.get('grpc.listen'),
         credentials: this.getCredentials(),
         package: ['cacheserver', 'grpc.health.v1'],
+        onLoadPackageDefinition: (pkg, server) => {
+          return new ReflectionService(pkg).addToServer(server);
+        },
         protoPath: [
           join(__dirname, '/../../protos/cache-server.proto'),
           join(__dirname, '/../../protos/health.proto'),
         ],
       },
-    });
+    };
   }
 
   getCredentials() {

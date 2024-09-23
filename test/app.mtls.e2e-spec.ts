@@ -26,7 +26,7 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
       imports: [AppModule.register()],
     }).compile();
 
-    app = module.createNestApplication();
+    //app = module.createNestApplication();
 
     app = module.createNestApplication();
     const grpcClientOptions = app.get(GrpcClientOptions);

@@ -6,6 +6,7 @@ export const grpcClient = async (
   packageName: string,
   credentials: ChannelCredentials,
 ) => {
+
   const reflectionClient = new GrpcReflection(host, credentials);
   const descriptor = await reflectionClient.getDescriptorBySymbol(packageName);
 
