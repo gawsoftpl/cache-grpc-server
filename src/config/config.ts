@@ -26,6 +26,11 @@ const Config = {
     connection: {
       url: process.env.REDIS_URL || 'redis://localhost:6379', // For cluster use redis://redis-1:6379,redis://redis-2:6379
       database: process.env.REDIS_DATABASE || '0',
+      sentinel: {
+        // IF you want to setup sentinel set redis://sentinel-0:26379,redis://sentinel-1:26379,redis://sentinel-2:26379
+        hosts: process.env.REDIS_SENTINEL_HOSTS || '',
+        master: process.env.REDIS_SENTINEL_MASTER || 'mymaster',
+      },
     },
     timeout: {
       connection: 10000,

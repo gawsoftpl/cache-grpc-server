@@ -1,12 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { RedisClientType } from 'redis';
+import { Injectable } from '@nestjs/common';
 import { SetRequestInterface } from '../interfaces/set.request.interface';
 import { StorageStrategyInterface } from '../interfaces/storage.strategy.interface';
 import { RpcException } from '@nestjs/microservices';
+import { RedisService } from '@liaoliaots/nestjs-redis';
+import Redis from 'ioredis';
 
 @Injectable()
 export class RedisStrategy implements StorageStrategyInterface {
-  constructor(@Inject('RedisClient') private cacheManager: RedisClientType) {}
+  private cacheManager: Redis;
+
+  constructor(private redisService: RedisService) {
+    this.cacheManager = redisService.getOrThrow();
+  }
 
   async existsMulti(keys: Array<string>): Promise<Array<boolean>> {
     const multi = this.cacheManager.multi();
@@ -21,7 +26,10 @@ export class RedisStrategy implements StorageStrategyInterface {
     if (!keys) return [];
     keys.forEach((key) => multi.get(key));
     const response = await multi.exec();
-    return response.map((value) => value?.toString() ?? '');
+    return response.map(([err, value]) => {
+      if (err) return '';
+      return value?.toString();
+    });
   }
 
   save(data: SetRequestInterface) {
@@ -30,10 +38,9 @@ export class RedisStrategy implements StorageStrategyInterface {
     if (typeof data?.key === 'undefined')
       throw new RpcException({ message: 'No set Key' });
 
-    let opts = {};
-    if (data.ttl > 0 || data.ttl == -1) opts = { EX: data.ttl };
+    const expireTtl = data?.ttl ?? -1;
 
     //if (!Number.isInteger(data?.ttl)) throw new Error('TTL wrong format');
-    return this.cacheManager.set(data.key, data.value, opts);
+    return this.cacheManager.set(data.key, data.value, 'EX', expireTtl);
   }
 }

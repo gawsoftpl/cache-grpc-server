@@ -2,6 +2,7 @@ import { credentials } from '@grpc/grpc-js';
 import { INestApplication } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
+
 import { GrpcClientOptions } from '../src/grpc/grpc-client.options';
 import { AppModule } from '../src/app.module';
 import Config from '../src/config/config';
