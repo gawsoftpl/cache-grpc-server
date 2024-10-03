@@ -62,6 +62,7 @@ export class RedisModuleFactory {
 
     const config: RedisClientOptions[] & ClusterClientOptions[] = [
       {
+        connectTimeout: redisConfig.timeout.connection,
         role: 'master',
         url: urls.length == 1 ? redisConfig.connection.url : undefined,
         reconnectOnError: (err) => {
