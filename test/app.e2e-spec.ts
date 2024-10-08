@@ -14,7 +14,6 @@ describe('Proxy cache server GRPC (e2e)', () => {
   let clientHealth;
 
   beforeAll(async () => {
-
     const module = await Test.createTestingModule({
       imports: [AppModule.register()],
     }).compile();
@@ -29,9 +28,8 @@ describe('Proxy cache server GRPC (e2e)', () => {
   });
 
   beforeEach(async () => {
-   
     const credentialsClient = credentials.createInsecure();
- 
+
     const packageCacheServer: any = await grpcClient(
       'localhost:3000',
       'cacheserver.Cache',
@@ -106,7 +104,10 @@ describe('Proxy cache server GRPC (e2e)', () => {
 
     call.on('data', async (message) => {
       expect(message.id).toBe('abc');
-      expect(message.exists.filter((flag) => flag).length).toBe(2);
+
+      // Exists keys
+      expect(message.exists).toStrictEqual([true, true, false]);
+
       call.end();
     });
 
@@ -116,7 +117,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
 
     call.write({
       id: 'abc',
-      keys: ['a', 'b'],
+      keys: ['a', 'b', 'noExists'],
     });
   });
 
@@ -124,10 +125,9 @@ describe('Proxy cache server GRPC (e2e)', () => {
     const call = client.Get();
     call.on('data', async (message) => {
       expect(message.id).toBe('abc2');
-      expect(
-        message.values.filter((value) => ['test', 'test2'].includes(value))
-          .length,
-      ).toBe(2);
+
+      expect(message.values).toStrictEqual(['test', 'test2', '']);
+
       await call.end();
     });
 
@@ -137,7 +137,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
 
     call.write({
       id: 'abc2',
-      keys: ['a', 'b'],
+      keys: ['a', 'b', 'no-exists'],
     });
   });
 
@@ -171,5 +171,4 @@ describe('Proxy cache server GRPC (e2e)', () => {
       });
     }
   }, 20000);
-
 });

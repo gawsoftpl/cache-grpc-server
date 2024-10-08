@@ -18,7 +18,7 @@ export class RedisStrategy implements StorageStrategyInterface {
     if (!keys) return [];
     keys.forEach((key) => multi.exists(key));
     const response = await multi.exec();
-    return response.map((response) => (response ? true : false));
+    return response.map(([err, response]) => (!err && response ? true : false));
   }
 
   async getMulti(keys: Array<string>): Promise<Array<string>> {
@@ -28,7 +28,7 @@ export class RedisStrategy implements StorageStrategyInterface {
     const response = await multi.exec();
     return response.map(([err, value]) => {
       if (err) return '';
-      return value?.toString();
+      return value ? value.toString() : '';
     });
   }
 
@@ -40,7 +40,7 @@ export class RedisStrategy implements StorageStrategyInterface {
 
     const expireTtl = data?.ttl ?? -1;
 
-    //if (!Number.isInteger(data?.ttl)) throw new Error('TTL wrong format');
+    if (!Number.isInteger(data?.ttl)) throw new Error('TTL wrong format');
     return this.cacheManager.set(data.key, data.value, 'EX', expireTtl);
   }
 }

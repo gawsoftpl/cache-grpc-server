@@ -11,7 +11,7 @@ import Config from '../config/config';
 @Module({})
 export class RedisModuleFactory {
   static async forAsyncRoot(
-    redisConfig: typeof Config.redis
+    redisConfig: typeof Config.redis,
   ): Promise<DynamicModule> {
     const logger = new Logger(RedisModuleFactory.name);
 
