@@ -1,6 +1,5 @@
 import { AppController } from './app.controller';
 import { GrpcClientOptions } from './grpc/grpc-client.options';
-
 import { RedisModule } from './redisStrategy/redis.module';
 import { HealthModule } from './health/health.module';
 import { GrpcModule } from './grpc/grpc.module';
@@ -8,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import Config from './config/config';
 import { DynamicModule, Module } from '@nestjs/common';
 import { RedisStrategy } from './redisStrategy';
-import { CacheModule } from '@nestjs/cache-manager';
 import { AppService } from "./app.service";
 
 @Module({})
@@ -31,14 +29,6 @@ export class AppModule {
           load: [() => Config],
         }),
         GrpcModule,
-        // GrpcReflectionModule.registerAsync({
-        //   inject: [GrpcClientOptions],
-        //   imports: [GrpcModule],
-        //   useFactory: (grpcClientOptions: GrpcClientOptions) => {
-        //     return grpcClientOptions.getOptions();
-        //   },
-        // }),
-        CacheModule.register(),
         RedisModule,
         HealthModule,
       ],

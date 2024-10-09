@@ -1,4 +1,4 @@
-FROM node:20-alpine3.18 as builder
+FROM node:20-alpine as builder
 
 WORKDIR /project
 
@@ -14,10 +14,10 @@ RUN yarn build
 
 USER node
 
-FROM node:20-alpine3.18 as deploy
+FROM node:20-alpine as deploy
 
 # Download GRPC healthcheck
-RUN GRPC_HEALTH_PROBE_VERSION=v0.4.6  \
+RUN GRPC_HEALTH_PROBE_VERSION=v0.4.34  \
     && wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 \
     && chmod +x /bin/grpc_health_probe
 
