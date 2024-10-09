@@ -9,6 +9,7 @@ import Config from './config/config';
 import { DynamicModule, Module } from '@nestjs/common';
 import { RedisStrategy } from './redisStrategy';
 import { CacheModule } from '@nestjs/cache-manager';
+import { AppService } from "./app.service";
 
 @Module({})
 export class AppModule {
@@ -23,6 +24,7 @@ export class AppModule {
           provide: 'STORAGE_STRATEGY',
           useClass: storageStrategy,
         },
+        AppService,
       ],
       imports: [
         ConfigModule.forRoot({

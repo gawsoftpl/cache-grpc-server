@@ -1,4 +1,4 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { GrpcStreamMethod } from '@nestjs/microservices';
 import { GetRequestInterface } from './interfaces/get.request.interface';
 import { GetResponseInterface } from './interfaces/get.response.interface';
@@ -6,15 +6,12 @@ import { SetRequestInterface } from './interfaces/set.request.interface';
 import { Observable, Subject } from 'rxjs';
 import { SetResponseInterface } from './interfaces/set.response.interface';
 import { ExistsResponseInterface } from './interfaces/exists.response.interface';
-import { StorageStrategyInterface } from './interfaces/storage.strategy.interface';
 import { Metadata, ServerDuplexStream } from '@grpc/grpc-js';
+import { AppService } from './app.service';
 
 @Controller('sample')
 export class AppController {
-  constructor(
-    @Inject('STORAGE_STRATEGY')
-    private readonly storageStrategy: StorageStrategyInterface,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @GrpcStreamMethod('Cache', 'Exists')
   exists(
@@ -25,7 +22,7 @@ export class AppController {
     const onNext = async (request: GetRequestInterface) => {
       const item: ExistsResponseInterface = {
         id: request.id,
-        exists: await this.storageStrategy.existsMulti(request.keys),
+        exists: await this.appService.existsMulti(request.keys),
       };
       subject.next(item);
     };
@@ -45,7 +42,7 @@ export class AppController {
     const onNext = async (request: GetRequestInterface) => {
       const item: GetResponseInterface = {
         id: request.id,
-        values: await this.storageStrategy.getMulti(request.keys),
+        values: await this.appService.getMulti(request.keys),
       };
       subject.next(item);
     };
@@ -70,7 +67,7 @@ export class AppController {
 
     const onNext = async (request: SetRequestInterface) => {
       try {
-        await this.storageStrategy.save(request);
+        await this.appService.save(request);
       } catch (err) {
         call.emit('error', err);
         return;

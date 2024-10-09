@@ -2,7 +2,7 @@ import { credentials } from '@grpc/grpc-js';
 import { INestApplication } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
-
+import { randomUUID } from 'crypto';
 import { GrpcClientOptions } from '../src/grpc/grpc-client.options';
 import { AppModule } from '../src/app.module';
 import Config from '../src/config/config';
@@ -153,10 +153,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
     const calls_to_run = 10000;
     let calls_counter = 0;
     call.on('data', async (message) => {
-      expect(
-        message.values.filter((value) => ['test', 'test2'].includes(value))
-          .length,
-      ).toBe(2);
+      expect(message.values).toEqual(['test', 'test2', '']);
       calls_counter++;
       if (calls_counter == calls_to_run) await call.end();
     });
@@ -167,7 +164,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
 
     for (let i = 0; i < calls_to_run; i++) {
       call.write({
-        keys: ['a', 'b'],
+        keys: ['a', 'b', randomUUID()],
       });
     }
   }, 20000);
