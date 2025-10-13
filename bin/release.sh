@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e  # Exit immediately on error
 
+LATEST_TAG=$(git describe --tags --abbrev=0)
+echo "Latest tag in Git: $LATEST_TAG"
+
 # Ask for version number
 read -p "Enter new version (e.g., 1.3.2-beta-0): " VERSION
 
