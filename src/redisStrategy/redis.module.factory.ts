@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DynamicModule, Logger, Module } from '@nestjs/common';
 import {
-  RedisModule as NestJsRedisModule,
-  RedisClientOptions,
-  ClusterModule as NestJsClusterModule,
-  ClusterClientOptions,
-} from '@liaoliaots/nestjs-redis';
+  RedisModule,
+} from '@nestjs-modules/ioredis';
 import Config from '../config/config';
 
 @Module({})
@@ -23,11 +20,16 @@ export class RedisModuleFactory {
         : [];
 
     const isSentinel = redisConfig.connection?.sentinel?.hosts?.length > 0;
+    const isCluster = !isSentinel && urls.length > 1;
+
+    commonOptions.connectTimeout = redisConfig.timeout.connection;
 
     if (isSentinel) {
       const sentinelHosts = redisConfig.connection.sentinel.hosts
         .split(',')
         .map((host) => new URL(host));
+
+      commonOptions.role ='master';
       commonOptions.name = redisConfig.connection.sentinel.master;
       commonOptions.sentinelUsername = sentinelHosts[0].username
         ? sentinelHosts[0].username
@@ -52,37 +54,20 @@ export class RedisModuleFactory {
           port: parseInt(hostData.port),
         };
       });
+    } else if(isCluster) {
+      commonOptions.connectTimeout = undefined;
     }
 
-    const isCluster = !isSentinel && urls.length > 1;
 
-    const dynamicModuleFactory = isCluster
-      ? NestJsClusterModule.forRoot
-      : NestJsRedisModule.forRoot;
-
-    const config: RedisClientOptions[] & ClusterClientOptions[] = [
-      {
-        connectTimeout: redisConfig.timeout.connection,
-        role: 'master',
-        url: urls.length == 1 ? redisConfig.connection.url : undefined,
-        reconnectOnError: (err) => {
-          logger.log(err);
-          return 2;
-        },
-        nodes:
-          urls?.length > 1 ? redisConfig.connection.url.split(',') : undefined,
+    const module = RedisModule.forRoot({
+      options: {
+        ...commonOptions,
       },
-    ];
-
-    const module = dynamicModuleFactory(
-      {
-        commonOptions: commonOptions,
-        config: config as any,
-        readyLog: true,
-        errorLog: true,
-      },
-      true,
-    );
+      type: isCluster ? 'cluster' : 'single',
+      url: urls.length == 1 ? redisConfig.connection.url : undefined,
+      nodes:
+        urls?.length > 1 ? redisConfig.connection.url.split(',') : undefined,
+    });
 
     return {
       imports: [module],

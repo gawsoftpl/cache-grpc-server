@@ -1,6 +1,5 @@
 import { credentials } from '@grpc/grpc-js';
 import { INestApplication } from '@nestjs/common';
-import { MicroserviceOptions } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { GrpcClientOptions } from '../src/grpc/grpc-client.options';
@@ -20,7 +19,7 @@ describe('Proxy cache server GRPC (e2e)', () => {
 
     app = module.createNestApplication();
     const grpcClientOptions = app.get(GrpcClientOptions);
-    app.connectMicroservice<MicroserviceOptions>(
+    app.connectMicroservice(
       grpcClientOptions.getOptions(),
     );
     await app.startAllMicroservices();

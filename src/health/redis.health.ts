@@ -1,46 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import {
-  HealthIndicator,
   HealthIndicatorResult,
-  HealthCheckError,
+  HealthIndicatorService
 } from '@nestjs/terminus';
 import Redis from 'ioredis';
-import { RedisService } from '@liaoliaots/nestjs-redis';
+import { InjectRedis } from '@nestjs-modules/ioredis';
 
 @Injectable()
-export class RedisHealthIndicator extends HealthIndicator {
-  private cache: Redis;
+export class RedisHealthIndicator {
 
-  constructor(private redisService: RedisService) {
-    super();
-    this.cache = redisService.getOrThrow();
-  }
+  constructor(@InjectRedis() private readonly cache: Redis) {}
 
   async isHealthy(key: string): Promise<HealthIndicatorResult> {
+    const service = new HealthIndicatorService();
+    const indicator = service.check(key);
+
     return new Promise(async (resolve, reject) => {
       const timeoutQuit = setTimeout(async () => {
         reject(
-          new HealthCheckError(
-            'Redis failed',
-            this.getStatus(key, false, {
-              pingResponse: 'Connection timeout',
-            }),
-          ),
+          indicator.down()
         );
       }, 1000);
 
       const pingResponse = await this.cache.ping();
       clearTimeout(timeoutQuit);
       const isHealthy = pingResponse == 'PONG';
-      const result = this.getStatus(key, isHealthy, {
-        pingResponse: pingResponse,
-      });
 
       if (isHealthy) {
-        return resolve(result);
+        return resolve(indicator.up());
       }
 
-      reject(new HealthCheckError('Redis failed', result));
+      reject(indicator.down({
+        pingResponse: pingResponse
+      }));
     });
   }
 }

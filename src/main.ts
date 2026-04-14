@@ -6,7 +6,9 @@ import { MicroserviceOptions } from '@nestjs/microservices';
 export async function bootstrap() {
   const app = await NestFactory.create(AppModule.register());
   const grpcClientOptions = app.get(GrpcClientOptions);
-  app.connectMicroservice<MicroserviceOptions>(grpcClientOptions.getOptions());
+  app.connectMicroservice<MicroserviceOptions>(
+    grpcClientOptions.getOptions() as any,
+  );
   await app.startAllMicroservices();
   await app.init();
   return app;

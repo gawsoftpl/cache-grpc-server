@@ -5,7 +5,10 @@ import { RedisStrategy } from './redis.strategy';
 import Config from '../config/config';
 
 @Module({
-  imports: [ConfigModule, RedisModuleFactory.forAsyncRoot(Config.redis)],
+  imports: [
+    ConfigModule,
+    RedisModuleFactory.forAsyncRoot(Config.redis),
+  ],
   providers: [RedisStrategy],
   exports: [RedisStrategy],
 })

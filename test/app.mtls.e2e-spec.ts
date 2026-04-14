@@ -31,7 +31,7 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
     app = module.createNestApplication();
     const grpcClientOptions = app.get(GrpcClientOptions);
     app.connectMicroservice<MicroserviceOptions>(
-      grpcClientOptions.getOptions(),
+      grpcClientOptions.getOptions() as any,
     );
     await app.startAllMicroservices();
     await app.init();

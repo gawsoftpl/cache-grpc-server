@@ -2,16 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { SetRequestInterface } from '../interfaces/set.request.interface';
 import { StorageStrategyInterface } from '../interfaces/storage.strategy.interface';
 import { RpcException } from '@nestjs/microservices';
-import { RedisService } from '@liaoliaots/nestjs-redis';
+import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 
 @Injectable()
 export class RedisStrategy implements StorageStrategyInterface {
-  private cacheManager: Redis;
 
-  constructor(private redisService: RedisService) {
-    this.cacheManager = redisService.getOrThrow();
-  }
+  constructor(@InjectRedis() private readonly cacheManager: Redis) {}
 
   async existsMulti(keys: Array<string>): Promise<Array<boolean>> {
     const multi = this.cacheManager.multi();

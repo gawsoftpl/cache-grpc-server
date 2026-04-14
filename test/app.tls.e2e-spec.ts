@@ -7,7 +7,6 @@ process.env.TLS_CA_CERT_PATH = join(__dirname, './tls/ca/ca.cert.pem');
 
 import { ChannelCredentials } from '@grpc/grpc-js';
 import { INestApplication } from '@nestjs/common';
-import { MicroserviceOptions } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
 import { GrpcClientOptions } from '../src/grpc/grpc-client.options';
 import { AppModule } from '../src/app.module';
@@ -26,9 +25,7 @@ describe('Proxy cache server GRPC with TLS and mTLS (e2e)', () => {
 
     app = module.createNestApplication();
     const grpcClientOptions = app.get(GrpcClientOptions);
-    app.connectMicroservice<MicroserviceOptions>(
-      grpcClientOptions.getOptions(),
-    );
+    app.connectMicroservice(grpcClientOptions.getOptions());
     await app.startAllMicroservices();
     await app.init();
   });
