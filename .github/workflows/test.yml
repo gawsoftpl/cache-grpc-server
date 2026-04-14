@@ -24,13 +24,13 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-    - run: yarn install
-    - run: yarn build
+        cache: 'npm'
+    - run: npm install
+    - run: npm run build
     - run: |
         sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 
         sudo chmod +x /usr/local/bin/docker-compose
 
         docker-compose version
-        yarn test:e2e
+        npm run test:e2e
